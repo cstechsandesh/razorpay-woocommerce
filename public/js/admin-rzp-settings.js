@@ -41,23 +41,26 @@ window.onload = function() {
 	{
 		var rzpElement = document.getElementById(item);
 
-		var data = {
-			'action' : 'rzpInstrumentation',
-			'event' : 'formfield.interacted',
-			'properties' : {
-				'page_url' : window.location.href,
-				'field_type' : rzpElement.type,
-				'field_name' : item
+		if(rzpElement != undefined && rzpElement != null && rzpElement != ''){
+			
+			var data = {
+				'action' : 'rzpInstrumentation',
+				'event' : 'formfield.interacted',
+				'properties' : {
+					'page_url' : window.location.href,
+					'field_type' : rzpElement.type,
+					'field_name' : item
+				}
+			};
+	
+			if (!sensitive_fields.includes(item)) {
+				data['properties']['field_value'] = rzpElement.value;
 			}
-		};
-
-		if (!sensitive_fields.includes(item)) {
-			data['properties']['field_value'] = rzpElement.value;
-		}
-
-		rzpElement.onfocusout = function(e)
-		{
-			rzpAjaxCall(data);
+	
+			rzpElement.onfocusout = function(e)
+			{
+				rzpAjaxCall(data);
+			}
 		}
 	}
 }
